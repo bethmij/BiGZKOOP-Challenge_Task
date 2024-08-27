@@ -1,22 +1,11 @@
 import {LuView} from "react-icons/lu";
-
 import Tables from "@/components/shared/Table/table.tsx";
 import {useEffect, useState} from "react";
-import axios from "axios";
 import {AiOutlineLoading3Quarters} from "react-icons/ai";
 import {useDispatch, useSelector} from "react-redux";
 import {selectUserTableData, setUserTableData} from "../../../slices/userSlice.tsx";
 import {userColumns} from "@/pages/preview/userTableDetails.tsx";
-
-
-const getUserData = async () => {
-    try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-        return response.data;
-    } catch (error) {
-        console.error('Error creating user:', error);
-    }
-};
+import {getAllUserData} from "@/lib/services/user.ts";
 
 export default function UserPreview() {
     const tableData = useSelector(selectUserTableData)
@@ -25,7 +14,7 @@ export default function UserPreview() {
 
     useEffect(() => {
         setIsLoading(true)
-        getUserData()
+        getAllUserData()
             .then(data => {
                 dispatch(setUserTableData(data))
             })

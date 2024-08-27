@@ -8,17 +8,18 @@ import SearchableDropdown from "@/components/shared/ComboBox/searchableDropdown.
 import {DatePicker} from "@/components/shared/DatePicker/datePicker.tsx";
 
 interface InputProps {
-    id: string;
-    inputType: string;
-    title: string;
-    required?: boolean;
-    register: UseFormRegister<FieldValues>;
-    error?: any;
-    selectItemList?: string[];
-    setValue?: UseFormSetValue<FieldValues>;
-    onSubmit?: (value: any) => void;
+    id: string,
+    inputType: string,
+    title: string,
+    required?: boolean,
+    register: UseFormRegister<FieldValues>,
+    error?: any,
+    selectItemList?: string[],
+    setValue?: UseFormSetValue<FieldValues>,
+    onSubmit?: (value: any) => void,
     isResetForm?: boolean,
-    textInputType?: string;
+    textInputType?: string,
+    value?: string | undefined
 }
 
 export const InputItem = (props: InputProps) => {
@@ -51,6 +52,7 @@ export const InputItem = (props: InputProps) => {
                         name={props.id}
                         required={props.required || false}
                         type={props.textInputType || "text"}
+                        value={props.value}
                     />
                     {props.error && <span className="text-rose-500">{props.error.message}</span>}
                 </div>
@@ -62,6 +64,7 @@ export const InputItem = (props: InputProps) => {
                               id={props.id}
                               name={props.id}
                               required={props.required || false}
+                              value={props.value}
                     />
                     {props.error && <span className="text-rose-500">{props.error.message}</span>}
                 </div>
@@ -101,7 +104,7 @@ export const InputItem = (props: InputProps) => {
                     )}
                     {props.error && <span className="text-rose-500">{props.error.message}</span>}
                 </div>
-            ) :  props.inputType === 'date' ? (
+            ) : props.inputType === 'date' ? (
                 <div className="flex flex-col gap-y-3">
                     <Label className="text-xl mb-2">{props.title}</Label>
                     <DatePicker/>

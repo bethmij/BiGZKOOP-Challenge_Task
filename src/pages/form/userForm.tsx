@@ -1,42 +1,54 @@
 import {CgFormatRight} from "react-icons/cg";
 import {Button} from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import {ScrollArea } from "@/components/ui/scroll-area";
 import {getCustomer} from "./userDetails.tsx";
 import {InputItem} from "@/components/shared/InputItems/InputItem.tsx";
 
 import {FieldValues, useForm} from "react-hook-form";
-import axios from "axios";
-import {useState} from "react";
-
-
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {selectUserTableData, setCurrentUser} from "../../../slices/userSlice.tsx";
+import {createUser, getUserData, updateUser} from "@/lib/services/user.ts";
 
 export const UserForm = () => {
 
     const form = getCustomer();
     const {register, handleSubmit, formState: {errors}, reset, setValue} = useForm()
     const [resetForm, setResetForm] = useState(false);
+    const {id} = useParams()
+    const userDate = useSelector(selectUserTableData)
+    const dispatch = useDispatch()
 
-    const createUser = async (data: FieldValues) => {
-        try {
-            const response = await axios.post('https://jsonplaceholder.typicode.com/users', {data}, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            console.log('User created:', response.data);
-        } catch (error) {
-            console.error('Error creating user:',error);
+    const buttonName = id?.startsWith("save")? "Submit" : "Update";
+
+    useEffect(() => {
+
+        if (id?.startsWith("update")){
+            const userID = id.split("update-")[1];
+            getUserData(userID).then(user => {
+                console.log(user)
+                dispatch(setCurrentUser(user))
+            })
         }
-    };
+    }, [dispatch, id, userDate]);
+
 
     const onSubmit = async (data: FieldValues) => {
         console.log(data);
         if(data) {
-            createUser(data).then(()=>{
-                alert("User created successfully!");
-                reset();
-                setResetForm(true);
-            });
+            if(buttonName === "Submit") {
+                createUser(data).then(() => {
+                    alert("User created successfully!");
+                });
+            }else if(buttonName === "Update" && id ) {
+                const userID = id.split("update-")[1];
+                updateUser(data, userID).then(() => {
+                    alert("User updated successfully!");
+                });
+            }
+            reset();
+            setResetForm(true);
         }
     }
 
@@ -58,21 +70,21 @@ export const UserForm = () => {
                         <div key={index} className="flex justify-around z-10 mt-10">
                             {formData.map(data => (
                                 <div key={data.id} className=" z-50 w-2/5 py-10">
-                                        <InputItem id={data.id} inputType={data.type} title={data.title} setValue={setValue} isResetForm={resetForm}
-                                                   required={data.required} register={register} selectItemList={data?.selectList}
-                                                   error={errors[`question${index}`]}  textInputType={data?.inputType}/>
+                                        <InputItem id={data.id} inputType={data.type} title={data.title}
+                                                   setValue={setValue} isResetForm={resetForm}
+                                                   required={data.required} register={register}
+                                                   selectItemList={data?.selectList} value={data?.value}
+                                                   error={errors[`question${index}`]}
+                                                   textInputType={data?.inputType}/>
 
                                 </div>
-
                             ))}
-
                         </div>
                     ))}
-
                 </ScrollArea>
 
                 <Button type="submit"
-                        className=" w-2/12 h-12 absolute text-2xl text-opacity-40 -bottom-5 right-28  mt-10">Submit</Button>
+                        className=" w-2/12 h-12 absolute text-2xl text-opacity-40 -bottom-5 right-28  mt-10">{buttonName}</Button>
             </form>
 
 

@@ -1,5 +1,3 @@
-
-import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
@@ -14,6 +12,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {selectUserTableData, setUserTableData} from '../../../slices/userSlice.tsx';
+import {Link} from "react-router-dom";
+import {deleteUserData} from "@/lib/services/user.ts";
 
 export interface User {
     id: string;
@@ -26,19 +26,6 @@ export interface User {
         city: string;
     };
 }
-
-const deleteUserData = async (userId: string): Promise<boolean> => {
-    try {
-        const response = await axios.delete(`https://jsonplaceholder.typicode.com/users/${userId}`);
-        if (response.status === 200) {
-            alert('User deleted successfully');
-            return true;
-        }
-    } catch (error) {
-        console.error('Error deleting user:', error);
-    }
-    return false;
-};
 
 export const userColumns: ColumnDef<User>[] = [
     {
@@ -158,10 +145,9 @@ export const userColumns: ColumnDef<User>[] = [
                             Copy User ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        {/* Uncomment and adjust the link as needed */}
-                        {/* <Link to={`/form/customer/update-${data.id}`}> */}
-                        {/*     <DropdownMenuItem>Update customer</DropdownMenuItem> */}
-                        {/* </Link> */}
+                         <Link to={`/form/update-${data.id}`}>
+                             <DropdownMenuItem>Update customer</DropdownMenuItem>
+                         </Link>
                         <DropdownMenuItem onClick={handleDelete}>
                             Delete User
                         </DropdownMenuItem>

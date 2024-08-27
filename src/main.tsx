@@ -7,6 +7,7 @@ import {RootLayout} from "@/components/layouts/rootLayout.tsx";
 import UserPreview from "@/pages/preview/userPreview.tsx";
 import {Provider} from "react-redux";
 import {store} from "../store.ts";
+import {UserForm} from "@/pages/form/userForm.tsx";
 
 
 const router = createBrowserRouter([
@@ -14,10 +15,13 @@ const router = createBrowserRouter([
         element: <RootLayout/>,
         children: [
             {
-                path: '/',
+                path: '/form/:id',
+                element: <UserForm/>
+            },
+            {
+                path: '/preview',
                 element: <UserPreview/>
             }
-            ,
 
         ]
     }

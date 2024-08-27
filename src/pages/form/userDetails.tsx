@@ -1,6 +1,9 @@
+import {useSelector} from "react-redux";
+import {selectCurrentUser} from "../../../slices/userSlice.tsx";
+
 const genderList = ["MALE", "FEMALE", "OTHER"]
 
-export interface User {
+export interface UserDetails {
     id: string,
     title: string,
     type: string,
@@ -10,9 +13,13 @@ export interface User {
     isEdit?: boolean,
     inputType? : string,
     selectList?: string[],
+    value?: string,
 }
 
-export function getCustomer() : User[][] {
+export function getCustomer() : UserDetails[][] {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const currentUser = useSelector(selectCurrentUser)
+
     return [
         [{
             id: "id",
@@ -21,7 +28,9 @@ export function getCustomer() : User[][] {
             placeholder: "",
             description: "Auto generated",
             required: true,
-            isEdit:true
+            isEdit:true,
+            value: currentUser?.id,
+
         },
             {
                 id: "name",
@@ -30,6 +39,7 @@ export function getCustomer() : User[][] {
                 placeholder: "Name",
                 description: "Full name required",
                 required: true,
+                value: currentUser?.name,
         }],
 
        [
@@ -40,7 +50,7 @@ export function getCustomer() : User[][] {
                 placeholder: "Contact",
                 description: "Mobile number",
                 required: false,
-                inputType: "number",
+                value: currentUser?.phone,
             },
             {
                 id: "email",
@@ -50,6 +60,7 @@ export function getCustomer() : User[][] {
                 required: true,
                 description: "Email required",
                 inputType: "email",
+                value: currentUser?.email,
        }],
         [{
             id: "gender",
