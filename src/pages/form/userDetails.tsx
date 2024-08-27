@@ -25,7 +25,7 @@ export function getCustomer() : User[][] {
         },
             {
                 id: "name",
-                title: "Name",
+                title: "User Name",
                 type: "input",
                 placeholder: "Name",
                 description: "Full name required",

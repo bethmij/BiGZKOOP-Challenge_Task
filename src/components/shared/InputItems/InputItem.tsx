@@ -70,7 +70,6 @@ export const InputItem = (props: InputProps) => {
                     <Label className="text-xl mb-2">{props.title}</Label>
                     <Select
                         onValueChange={handleSelectChange}
-
                         value={selectedOption}
                         required={props.required}
                     >
