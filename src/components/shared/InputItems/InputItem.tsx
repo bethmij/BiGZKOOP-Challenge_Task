@@ -1,14 +1,15 @@
-import {Input} from "../../components/ui/input";
-
-import {Label} from "../ui/label";
+import {Input} from "@/components/ui/input.tsx";
+import {Textarea} from "@/components/ui/textarea.tsx";
+import {Label} from "@/components/ui/label.tsx";
 import {FieldValues, UseFormRegister, UseFormSetValue} from "react-hook-form";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
 import {useEffect, useState} from "react";
-import {Textarea} from "../../components/ui/textarea.tsx";
+import SearchableDropdown from "@/components/shared/ComboBox/searchableDropdown.tsx";
+import {DatePicker} from "@/components/shared/DatePicker/datePicker.tsx";
 
 interface InputProps {
     id: string;
-    inputType: 'input' | 'textArea' | 'select' | 'comboBox';
+    inputType: string;
     title: string;
     required?: boolean;
     register: UseFormRegister<FieldValues>;
@@ -16,7 +17,8 @@ interface InputProps {
     selectItemList?: string[];
     setValue?: UseFormSetValue<FieldValues>;
     onSubmit?: (value: any) => void;
-    isResetForm?: boolean
+    isResetForm?: boolean,
+    textInputType?: string;
 }
 
 export const InputItem = (props: InputProps) => {
@@ -48,6 +50,7 @@ export const InputItem = (props: InputProps) => {
                         id={props.id}
                         name={props.id}
                         required={props.required || false}
+                        type={props.textInputType || "text"}
                     />
                     {props.error && <span className="text-rose-500">{props.error.message}</span>}
                 </div>
@@ -55,10 +58,10 @@ export const InputItem = (props: InputProps) => {
                 <div className="flex flex-col gap-y-3">
                     <Label className="text-xl mb-2">{props.title}</Label>
                     <Textarea className="text-lg"
-                        {...props.register(props.id)}
-                        id={props.id}
-                        name={props.id}
-                        required={props.required || false}
+                              {...props.register(props.id)}
+                              id={props.id}
+                              name={props.id}
+                              required={props.required || false}
                     />
                     {props.error && <span className="text-rose-500">{props.error.message}</span>}
                 </div>
@@ -82,7 +85,30 @@ export const InputItem = (props: InputProps) => {
                     </Select>
                     {props.error && <span className="text-rose-500">{props.error.message}</span>}
                 </div>
-            ) :  null}
+            ) : props.inputType === "comboBox" && Array.isArray(props.selectItemList) ? (
+                <div className="flex flex-col gap-y-3">
+                    <Label className="text-xl ">{props.title}</Label>
+                    {props.setValue ? (
+                        <SearchableDropdown
+                            id={props.id}
+                            title={props.title}
+                            list={props.selectItemList}
+                            setValue={props.setValue}
+                            required={props.required}
+                            resetForm={props.isResetForm}
+                        />
+                    ) : (
+                        <span className="text-rose-500">setValue is required for comboBox</span>
+                    )}
+                    {props.error && <span className="text-rose-500">{props.error.message}</span>}
+                </div>
+            ) :  props.inputType === 'date' ? (
+                <div className="flex flex-col gap-y-3">
+                    <Label className="text-xl mb-2">{props.title}</Label>
+                    <DatePicker/>
+                    {props.error && <span className="text-rose-500">{props.error.message}</span>}
+                </div>
+            ) : null}
         </>
     );
 };

@@ -1,5 +1,5 @@
 import './index.css'
-import {CustomerForm} from "./pages/form/customerForm.tsx";
+import {UserForm} from "./pages/form/userForm.tsx";
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {RouterProvider, createBrowserRouter} from "react-router-dom";
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <CustomerForm />}
+                element: <UserForm />}
             ,
 
         ]
