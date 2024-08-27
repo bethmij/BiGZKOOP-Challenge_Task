@@ -3,12 +3,19 @@ import {CustomerForm} from "./pages/form/customerForm.tsx";
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {RouterProvider, createBrowserRouter} from "react-router-dom";
+import {RootLayout} from "@/components/layouts/rootLayout.tsx";
 
 
 const router = createBrowserRouter([
     {
-        path: "/",
-        element: <CustomerForm />
+        element: <RootLayout />,
+        children: [
+            {
+                path: '/',
+                element: <CustomerForm />}
+            ,
+
+        ]
     }
 ]);
 
