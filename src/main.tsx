@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {RouterProvider, createBrowserRouter} from "react-router-dom";
 import {RootLayout} from "@/components/layouts/rootLayout.tsx";
+import UserPreview from "@/pages/preview/userPreview.tsx";
 
 
 const router = createBrowserRouter([
@@ -12,7 +13,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <UserForm />}
+                element: <UserPreview/>}
             ,
 
         ]

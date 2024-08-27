@@ -61,5 +61,13 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  ::-webkit-scrollbar {
+    @apply w-2
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-purple rounded
+  }
 }
 

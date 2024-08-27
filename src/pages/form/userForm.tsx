@@ -43,19 +43,20 @@ export const UserForm = () => {
 
 
     return (
-        <>
-            <div className="absolute top-0 left-1/2 flex gap-x-5 -ms-32 mt-4 opacity-80">
+        <div className="overflow-hidden">
+            <div className="w-full flex gap-x-5 justify-center mt-5 opacity-80">
                 <CgFormatRight size="45"/>
                 <h1 className="text-4xl ">User Form</h1>
             </div>
 
-            <form className="w-4/5 h-4/5 ms-52 mt-32 flex-col rounded-full absolute "
+
+            <form className="w-4/5 h-[80vh] ms-52 mt-10 flex-col rounded-full  "
                   onSubmit={handleSubmit(onSubmit)}>
                 <ScrollArea className="h-full w-full rounded-3xl z-0 ">
-                    <div className=" bg-[url('@/assets/blured.png')] bg-center bg-cover w-full h-full absolute border-2 -z-50 rounded-3xl opacity-100 "></div>
+                    <div className=" bg-[url('@/assets/blured.png')] bg-center bg-cover w-full h-full absolute border-2  rounded-3xl opacity-100 "></div>
 
                     {form.map((formData, index) => (
-                        <div key={index} className="flex justify-around mb-4 z-10 mt-10">
+                        <div key={index} className="flex justify-around z-10 mt-10">
                             {formData.map(data => (
                                 <div key={data.id} className=" z-50 w-2/5 py-10">
                                         <InputItem id={data.id} inputType={data.type} title={data.title} setValue={setValue} isResetForm={resetForm}
@@ -72,8 +73,10 @@ export const UserForm = () => {
                 </ScrollArea>
 
                 <Button type="submit"
-                        className=" w-2/12 h-12 absolute text-2xl text-opacity-40 -bottom-10 right-0 m-5 mt-10">Submit</Button>
+                        className=" w-2/12 h-12 absolute text-2xl text-opacity-40 -bottom-5 right-28  mt-10">Submit</Button>
             </form>
-        </>
+
+
+        </div>
     );
 };
