@@ -16,7 +16,6 @@ export const UserForm = () => {
     const {register, handleSubmit, formState: {errors}, reset, setValue} = useForm()
     const [resetForm, setResetForm] = useState(false);
 
-
     const createUser = async (data: FieldValues) => {
         try {
             const response = await axios.post('https://jsonplaceholder.typicode.com/users', {data}, {

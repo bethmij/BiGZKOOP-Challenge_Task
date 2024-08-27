@@ -1,10 +1,13 @@
 import {LuView} from "react-icons/lu";
 
 import Tables from "@/components/shared/Table/table.tsx";
-import {Customer, userColumns} from "@/pages/preview/userTableDetails.tsx";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {AiOutlineLoading3Quarters} from "react-icons/ai";
+import {useDispatch, useSelector} from "react-redux";
+import {selectUserTableData, setUserTableData} from "../../../slices/userSlice.tsx";
+import {userColumns} from "@/pages/preview/userTableDetails.tsx";
+
 
 const getUserData = async () => {
     try {
@@ -16,17 +19,18 @@ const getUserData = async () => {
 };
 
 export default function UserPreview() {
-    const [tableData, setTableData] = useState<Customer[]>([])
+    const tableData = useSelector(selectUserTableData)
+    const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         setIsLoading(true)
         getUserData()
             .then(data => {
-                setTableData(data)
+                dispatch(setUserTableData(data))
             })
             .finally(() => setIsLoading(false))
-    }, [])
+    }, [dispatch])
 
     return (
         <div>
@@ -41,7 +45,7 @@ export default function UserPreview() {
                         <AiOutlineLoading3Quarters size={40} className="animate-spin"/>
                     </div>
                 ) : (
-                    <div className="w-[80vw] h-[90vh]">
+                    <div className="w-[90vw] h-[90vh]">
                         <Tables columns={userColumns} data={tableData}/>
                     </div>
 
