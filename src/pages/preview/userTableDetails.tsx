@@ -1,6 +1,10 @@
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
+
+import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
+import { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -8,16 +12,13 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
-import {
-    ColumnDef
-} from '@tanstack/react-table';
+} from '@/components/ui/dropdown-menu';
+import {selectUserTableData, setUserTableData} from '../../../slices/userSlice.tsx';
 
-export interface Customer {
+export interface User {
     id: string;
     name: string;
-    userName: string;
+    username: string;
     email: string;
     phone: string;
     website: string;
@@ -25,15 +26,29 @@ export interface Customer {
         city: string;
     };
 }
-export const userColumns : ColumnDef<Customer>[] = [
+
+const deleteUserData = async (userId: string): Promise<boolean> => {
+    try {
+        const response = await axios.delete(`https://jsonplaceholder.typicode.com/users/${userId}`);
+        if (response.status === 200) {
+            alert('User deleted successfully');
+            return true;
+        }
+    } catch (error) {
+        console.error('Error deleting user:', error);
+    }
+    return false;
+};
+
+export const userColumns: ColumnDef<User>[] = [
     {
-        id: "select",
+        id: 'select',
         header({ table }) {
             return (
                 <Checkbox
                     checked={
                         table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                        (table.getIsSomePageRowsSelected() && 'indeterminate')
                     }
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
                     aria-label="Select all"
@@ -51,72 +66,83 @@ export const userColumns : ColumnDef<Customer>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "id",
-        header: ({ column }) => {
-            return (
-                <Button
-                    className="text-center text-xl text-metal"
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    User ID
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            );
-        },
+        accessorKey: 'id',
+        header: ({ column }) => (
+            <Button
+                className="text-center text-xl text-metal"
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+            >
+                User ID
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("id")}</div>
+            <div className="capitalize">{row.getValue('id')}</div>
         ),
     },
     {
-        accessorKey: "name",
-        header: "Name",
+        accessorKey: 'name',
+        header: 'Name',
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("name")}</div>
+            <div className="capitalize">{row.getValue('name')}</div>
         ),
     },
     {
-        accessorKey: "username",
-        header: "User Name",
+        accessorKey: 'username',
+        header: 'User Name',
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("username")}</div>
+            <div className="capitalize">{row.getValue('username')}</div>
         ),
     },
     {
-        accessorKey: "email",
-        header: "Email",
+        accessorKey: 'email',
+        header: 'Email',
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("email")}</div>
+            <div className="capitalize">{row.getValue('email')}</div>
         ),
     },
     {
-        accessorKey: "phone",
-        header: "Contact Number",
+        accessorKey: 'phone',
+        header: 'Contact Number',
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("phone")}</div>
+            <div className="capitalize">{row.getValue('phone')}</div>
         ),
     },
     {
-        accessorKey: "website",
-        header: "Website",
+        accessorKey: 'website',
+        header: 'Website',
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("website")}</div>
+            <div className="capitalize">{row.getValue('website')}</div>
         ),
     },
     {
         accessorFn: (row) => row.address.city,
-        id: "city",
-        header: "City",
+        id: 'city',
+        header: 'City',
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("city")}</div>
+            <div className="capitalize">{row.getValue('city')}</div>
         ),
     },
-
     {
-        id: "actions",
+        id: 'actions',
         enableHiding: false,
         cell: ({ row }) => {
-            const data: Customer = row.original;
+            const data: User = row.original;
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const userData = useSelector(selectUserTableData);
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const dispatch = useDispatch();
+
+            const handleDelete = () => {
+                deleteUserData(data.id).then((success) => {
+                    if (success) {
+                        const newData = userData.filter((user:User) => user.username!== data.username);
+                        console.log(data)
+                        dispatch(setUserTableData(newData));
+                    }
+                });
+            };
 
             return (
                 <DropdownMenu>
@@ -132,10 +158,11 @@ export const userColumns : ColumnDef<Customer>[] = [
                             Copy User ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <Link to={`/form/customer/update-${data.id}`}>
-                            <DropdownMenuItem>Update customer</DropdownMenuItem>
-                        </Link>
-                        <DropdownMenuItem onClick={() => console.log("Delete customer functionality here")}>
+                        {/* Uncomment and adjust the link as needed */}
+                        {/* <Link to={`/form/customer/update-${data.id}`}> */}
+                        {/*     <DropdownMenuItem>Update customer</DropdownMenuItem> */}
+                        {/* </Link> */}
+                        <DropdownMenuItem onClick={handleDelete}>
                             Delete User
                         </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -144,3 +171,7 @@ export const userColumns : ColumnDef<Customer>[] = [
         },
     },
 ];
+
+
+
+

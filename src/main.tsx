@@ -1,19 +1,22 @@
 import './index.css'
-import {UserForm} from "./pages/form/userForm.tsx";
+// import {UserForm} from "./pages/form/userForm.tsx";
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {RouterProvider, createBrowserRouter} from "react-router-dom";
 import {RootLayout} from "@/components/layouts/rootLayout.tsx";
 import UserPreview from "@/pages/preview/userPreview.tsx";
+import {Provider} from "react-redux";
+import {store} from "../store.ts";
 
 
 const router = createBrowserRouter([
     {
-        element: <RootLayout />,
+        element: <RootLayout/>,
         children: [
             {
                 path: '/',
-                element: <UserPreview/>}
+                element: <UserPreview/>
+            }
             ,
 
         ]
@@ -24,6 +27,8 @@ const rootElement = document.getElementById('root') as HTMLElement;
 
 ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <Provider store={store}>
+            <RouterProvider router={router}/>
+        </Provider>
     </React.StrictMode>,
 );
