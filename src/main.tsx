@@ -1,10 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
 import './index.css'
+import {CustomerForm} from "./pages/form/customerForm.tsx";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import {RouterProvider, createBrowserRouter} from "react-router-dom";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <CustomerForm />
+    }
+]);
+
+const rootElement = document.getElementById('root') as HTMLElement;
+
+ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>,
+);

@@ -1,14 +1,13 @@
 import './App.css'
-import {Button} from "./components/ui/button.tsx"
 
 function App() {
 
 
   return (
       <>
-          <div>
-              <Button>Click meeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</Button>
-          </div>
+          <h1 className="text-3xl text-rose-600 font-bold underline">
+              Hello world!
+          </h1>
       </>
   )
 }
