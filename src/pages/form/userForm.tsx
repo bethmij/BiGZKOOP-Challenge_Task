@@ -23,7 +23,6 @@ export const UserForm = () => {
     const buttonName = id?.startsWith("save")? "Submit" : "Update";
 
     useEffect(() => {
-
         if (id?.startsWith("update")){
             const userID = id.split("update-")[1];
             getUserData(userID).then(user => {

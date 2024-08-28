@@ -34,7 +34,7 @@ export const createUser = async (data: FieldValues) => {
 
 export const updateUser = async (data: FieldValues, userId:string) => {
     try {
-        const response = await axios.post(`https://jsonplaceholder.typicode.com/users/${userId}`, {data}, {
+        const response = await axios.put(`https://jsonplaceholder.typicode.com/users/${userId}`, {data}, {
             headers: {
                 'Content-Type': 'application/json'
             }

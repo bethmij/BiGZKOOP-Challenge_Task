@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {User} from "@/pages/form/userDetails.tsx";
+import {User} from "@/pages/preview/userTableDetails.tsx";
+
 
 const initialState = {
     userTableData : [],
